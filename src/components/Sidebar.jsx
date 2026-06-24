@@ -94,7 +94,7 @@ export default function Sidebar({ activeTab, setActiveTab, onBackToHome }) {
         
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '5px' }}>
           <a 
-            href="https://github.com/BitgetLimited/agent_hub" 
+            href="https://github.com/Laegend14/kazua" 
             target="_blank" 
             rel="noopener noreferrer" 
             style={{ color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center' }}
