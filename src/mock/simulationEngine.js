@@ -600,7 +600,10 @@ export class DashboardSimulator {
         if (newNavHistory.length > 15) newNavHistory.shift();
       } else {
         if (newNavHistory.length > 0) {
-          newNavHistory[newNavHistory.length - 1].nav = currentNav;
+          newNavHistory[newNavHistory.length - 1] = {
+            ...newNavHistory[newNavHistory.length - 1],
+            nav: currentNav
+          };
         }
       }
     }
@@ -611,7 +614,10 @@ export class DashboardSimulator {
         if (newBtcHistory.length > 15) newBtcHistory.shift();
       } else {
         if (newBtcHistory.length > 0) {
-          newBtcHistory[newBtcHistory.length - 1].price = newPrices.BTC;
+          newBtcHistory[newBtcHistory.length - 1] = {
+            ...newBtcHistory[newBtcHistory.length - 1],
+            price: newPrices.BTC
+          };
         }
       }
     }
