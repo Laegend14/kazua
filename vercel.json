@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/bitget/:path*",
+      "destination": "https://api.bitget.com/:path*"
+    },
+    {
+      "source": "/api/bitget/:path*/",
+      "destination": "https://api.bitget.com/:path*/"
+    },
+    {
+      "source": "/api/kiyotaka/:path*",
+      "destination": "https://api.kiyotaka.ai/:path*"
+    },
+    {
+      "source": "/api/kiyotaka/:path*/",
+      "destination": "https://api.kiyotaka.ai/:path*/"
+    }
+  ]
+}
