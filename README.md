@@ -180,3 +180,58 @@ Follow these examples to verify the core capabilities of the Market Analyst plat
 3. Lower the **Max Leverage Limit** slider in the *Infra Risk Limits Controls* card.
 4. Stage a manual order on the execution ticket with high leverage (e.g., `20x`), and observe how the risk scoring circle shifts and triggers warning badges dynamically.
 
+---
+
+## 📝 Hackathon Submission Q&A
+
+### 1. What specific pain point in agent development or trading workflows did you identify? How does your solution address it?
+
+*   **Pain Point**: 
+    1. **Black-Box Execution Risk**: Fully autonomous trading agents often run into "black-box" execution risks, where they trade without transparency, making it hard for risk managers to trust them. A single API error or sentiment anomaly can result in sudden, unchecked liquidations.
+    2. **Disjointed Data Streams**: On-chain indicators (like perpetual funding rates, institutional ETF flows, and whale liquidations) are usually isolated from the trader's actual account positioning on the exchange (margin usage, open leverage, and balances).
+*   **Our Solution**: 
+    *   **Kazua AI** bridges this gap by acting as a **Real-Time Market Analyst and Risk Suite** instead of an unmonitored automated execution bot. 
+    *   It pulls live exchange account balances, margin exposure, and open positions (via the **Bitget API**) and overlays them with live macro sentiment (via the **Kiyotaka API**). 
+    *   This unified dataset is ingested by **Google Gemini 3.5 Flash** to generate structured, real-time **AI Analyst Reports** providing clear risk stances, sentiment levels, and strategic execution guidance. 
+    *   It leaves the final trading decision to the human operator (through a manual ticket interface) while automating the complex, continuous synthesis of data and computing a real-time portfolio risk score (0-100) with custom safety limits and killswitches.
+
+---
+
+### 2. Progress
+
+*   **Key Development Challenges & Solutions**:
+    1. **CORS and Client-Side Requests**: Directly calling Bitget and Gemini endpoints from a frontend React app resulted in browser CORS preflight blocks. *Solution*: Configured Vite reverse proxy pathways (`vite.config.js`) to route requests seamlessly through localhost proxies.
+    2. **HMAC-SHA256 API Signing**: Bitget requests require custom header signatures constructed using api keys, timestamps, and passphrases. Importing heavy Node-based crypto libraries in Vite is prone to build failures. *Solution*: Wrote a clean, lightweight cryptography wrapper utilizing the browser's native **Web Crypto API** (`crypto.subtle`) to compute HMAC signatures on-the-fly.
+    3. **Credentials Management**: Accidentally committing `.env` settings caused GitHub Push Protection blocks. *Solution*: Re-initialized the repository history from scratch, added proper `.env` ignore rules to `.gitignore`, and forced a clean upstream push.
+*   **Completed Features**:
+    *   **Market Analyst Suite Dashboard**: A high-fidelity, interactive dark-theme workspace for tracking live portfolio assets and active position states.
+    *   **Steered AI Analyst Reports**: Allows users to dynamically adjust risk stops, analytical stances (e.g., conservative, aggressive), and risk sensitivity sliders to tailor the Gemini report output.
+    *   **API Audit Logging**: Implemented a live API Call audit log that monitors network latency, response statuses, and parameters for outbound queries.
+    *   **On-Chain Sentiment Engine**: Visualizes live perp funding rates, weekly institutional ETF flows, and Binance liquidation activity from the Kiyotaka API.
+    *   **Risk Limit Controls**: Custom interfaces to simulate leverage limits and drawdown killswitches.
+    *   **Strategy Evaluator**: Run backtests to compare simulated returns of different analyst routines.
+    *   **Trade Log Exporter**: Standardized CSV spreadsheet extraction for audits.
+*   **Missing Features & Next Steps**:
+    *   **WebSocket Streaming**: Migrate the current REST polling for prices and positions to live WebSocket connections.
+    *   **Live Order Execution**: Enable the manual execution ticket to post live orders directly back to Bitget exchange endpoints (currently acts as simulated draft orders).
+    *   **Multi-Asset Analysis**: Expand focus steering beyond BTC/USDT to include broader altcoin assets.
+*   **Frameworks, Models, and APIs Used**:
+    *   **Frameworks**: React.js (Vite), Vanilla CSS.
+    *   **Models**: Google Gemini 1.5 Flash (via API).
+    *   **APIs & Tools**:
+        *   **Bitget API / Agent Hub**: Ingests margin, account state, and active futures position tracking.
+        *   **Kiyotaka Data API**: Feeds perpetual funding rates, institutional ETF flows, and exchange liquidations.
+
+---
+
+### 3. AI Trading Thoughts (Optional)
+
+*   **Experience using Bitget AI tools**:
+    *   The setup and integration experience was somewhat demanding. Instead of a centralized package manager command or one-click installation, we had to manually search through GitHub repositories to locate, compile, and configure the correct Model Context Protocol (MCP) server implementation.
+    *   Additionally, integrating the agent hub API required keeping a active VPN tunnel open to bypass localized network connection drops and successfully test/verify our demo workspace.
+*   **Suggestions for Improvement**:
+    *   *Unified Developer SDK*: Provide a unified NPM/Pip client package that pre-packages standard exchange authentication/signing workflows and provides direct wrappers for the Agent Hub.
+    *   *Sandbox Access*: Open up localized, VPN-free sandbox endpoints for simulated trading so developers can test agent integrations before dealing with strict network rules or live-api signatures.
+*   **Views on the Future of Agentic Trading**:
+    *   We believe the future lies in **Hybrid Intelligence (Human-in-the-loop)** models. While AI agents are incredible at parsing vast streams of unstructured text, order books, and funding rate disparities, they lack long-term strategic intuition and are vulnerable to sudden tail-risk events. The ideal workflow couples automated AI-driven analysis and risk calculations with human-guided steering limits.
+
